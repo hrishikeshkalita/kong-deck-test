@@ -1,0 +1,135 @@
+_format_version: "1.1"
+
+plugins:
+- name: ip-restriction
+  config:
+    allow:
+    - 192.168.29.112
+    - 192.168.56.1
+    deny: null
+    message: null
+    status: null
+  enabled: true
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- name: response-transformer
+  config:
+      add:
+        headers:
+        - 'responseAdd: headers'
+        json:
+        - 'responseAdd: json'
+        json_types: []
+      append:
+        headers:
+        - 'responseAppend: headers'
+        json:
+        - 'responseAppend: json'
+        json_types: []
+      remove:
+        headers: []
+        json: []
+      rename:
+        headers: []
+      replace:
+        headers: []
+        json: []
+        json_types: []
+  enabled: true
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- name: request-transformer
+  config:
+      add:
+        body:
+        - 'requestAdd: body'
+        headers:
+        - 'requestAdd: headers'
+        querystring:
+        - 'requestAdd: queryString'
+      append:
+        body:
+        - 'requestAppend: body'
+        headers:
+        - 'requestAppend: headers'
+        querystring:
+        - 'requestAppend: queryStrings'
+      http_method: null
+      remove:
+        body: []
+        headers: []
+        querystring: []
+      rename:
+        body: []
+        headers: []
+        querystring: []
+      replace:
+        body: []
+        headers: []
+        querystring: []
+        uri: null
+  enabled: true
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- name: cors
+  config:
+      credentials: false
+      exposed_headers: null
+      headers: null
+      max_age: null
+      methods:
+      - GET
+      - HEAD
+      - PUT
+      - PATCH
+      - POST
+      - DELETE
+      - OPTIONS
+      - TRACE
+      - CONNECT
+      origins:
+      - '*'
+      preflight_continue: false
+  enabled: true
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- name: jwt 
+  config:
+    anonymous: null
+    claims_to_verify: null
+    cookie_names: []
+    header_names:
+    - authorization
+    key_claim_name: iss
+    maximum_expiration: 0
+    run_on_preflight: true
+    secret_is_base64: false
+    uri_param_names:
+    - jwt
+  enabled: true
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- name: rate-limiting
+  config: 
+    minute: 5
+    hour: 10000
+    policy: local
+    fault_tolerant: true
+    hide_client_headers: false
+    redis_ssl: false
+    redis_ssl_verify: false

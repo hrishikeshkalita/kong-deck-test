@@ -1,0 +1,24 @@
+---
+-
+  name: KONG DECK ROLL BACK TO LAST CONFIGURATIONS
+  hosts: localhost
+  tasks:
+    -
+      name: BUILD DECK IMAGE
+      shell: 'docker build -t hkalita1998/kong-deck-rollback:latest .'
+    -
+      name: CHECK DECK CONECTIVITY WITH KONG ADMIN API
+      shell: 'docker run hkalita1998/kong-deck-rollback:latest ping --kong-addr http://172.23.223.142:8001'
+    -
+      name: VALIDATE BACKUP FILE
+      shell: 'docker run hkalita1998/kong-deck-rollback:latest validate --kong-addr http://172.23.223.142:8001 --state /deck/backup.yaml'
+    -
+      name: CONFIGURATION DIFFERENCE BETWEEN STATE FILE AND KONG DATASTORE
+      shell: 'docker run hkalita1998/kong-deck-rollback:latest diff --kong-addr http://172.23.223.142:8001 --state /deck/backup.yaml'
+    -
+      name: SYNCING CONFIGURATIONS
+      shell: 'docker run hkalita1998/kong-deck-rollback:latest sync --kong-addr http://172.23.223.142:8001 --state /deck/backup.yaml'
+    -
+      name: CLEAN UP
+      shell: 'docker container prune --force --filter="label=maintainer=hkalita1998/kong-deck"'
+...    

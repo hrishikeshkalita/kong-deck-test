@@ -1,0 +1,30 @@
+---
+-
+  name: DEPLOY CONFIGURATIONS TO KONG
+  hosts: localhost
+  tasks:
+    -
+      name: RUN PYTHON SCRIPT
+      shell: 'python3.10 build_aggreagted_config.py'
+    -
+      name: BUILD DECK IMAGE
+      shell: 'docker build -t hkalita1998/kong-deck:latest .'
+    -
+      name: CHECK DECK CONECTIVITY WITH KONG ADMIN API
+      shell: 'docker run -d hkalita1998/kong-deck ping --kong-addr http://172.23.223.142:8001'
+    -
+      name: BACKUP EXISTING CONFIGURATIONS
+      shell: 'rm -f ./rollback/backup.yaml && docker run -v $(pwd)/rollback:/deck hkalita1998/kong-deck:latest dump --kong-addr http://172.23.223.142:8001 -o /deck/backup.yaml'
+    -
+      name: VALIDATE STATE FILE
+      shell: 'docker run -d hkalita1998/kong-deck:latest validate --kong-addr http://172.23.223.142:8001 --state ./deck/kong.yaml'
+    -
+      name: CONFIGURATION DIFFERENCE BETWEEN STATE FILE AND KONG DATASTORE
+      shell: 'docker run -d hkalita1998/kong-deck:latest diff --kong-addr http://172.23.223.142:8001 --state ./deck/kong.yaml'
+    -
+      name: SYNCING CONFIGURATIONS
+      shell: 'docker run hkalita1998/kong-deck sync --kong-addr http://172.23.223.142:8001 --state ./deck/kong.yaml'
+    -
+      name: CLEAN UP
+      shell: 'docker container prune --force --filter="label=maintainer=hkalita1998/kong-deck"'
+...    

@@ -1,0 +1,320 @@
+_format_version: "1.1"
+consumers:
+- custom_id: consumer0
+  username: consumer0
+plugins:
+- config:
+    credentials: false
+    exposed_headers: null
+    headers: null
+    max_age: null
+    methods:
+    - GET
+    - HEAD
+    - PUT
+    - PATCH
+    - POST
+    - DELETE
+    - OPTIONS
+    - TRACE
+    - CONNECT
+    origins:
+    - '*'
+    preflight_continue: false
+  enabled: true
+  name: cors
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- config:
+    allow:
+    - 192.168.29.112
+    - 192.168.56.1
+    deny: null
+    message: null
+    status: null
+  enabled: true
+  name: ip-restriction
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- config:
+    anonymous: null
+    claims_to_verify: null
+    cookie_names: []
+    header_names:
+    - authorization
+    key_claim_name: iss
+    maximum_expiration: 0
+    run_on_preflight: true
+    secret_is_base64: false
+    uri_param_names:
+    - jwt
+  enabled: true
+  name: jwt
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- config:
+    day: null
+    fault_tolerant: true
+    header_name: null
+    hide_client_headers: false
+    hour: 10000
+    limit_by: consumer
+    minute: 5
+    month: null
+    path: null
+    policy: local
+    redis_database: 0
+    redis_host: null
+    redis_password: null
+    redis_port: 6379
+    redis_server_name: null
+    redis_ssl: false
+    redis_ssl_verify: false
+    redis_timeout: 2000
+    redis_username: null
+    second: null
+    year: null
+  enabled: true
+  name: rate-limiting
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- config:
+    add:
+      body:
+      - 'requestAdd: body'
+      headers:
+      - 'requestAdd: headers'
+      querystring:
+      - 'requestAdd: queryString'
+    append:
+      body:
+      - 'requestAppend: body'
+      headers:
+      - 'requestAppend: headers'
+      querystring:
+      - 'requestAppend: queryStrings'
+    http_method: null
+    remove:
+      body: []
+      headers: []
+      querystring: []
+    rename:
+      body: []
+      headers: []
+      querystring: []
+    replace:
+      body: []
+      headers: []
+      querystring: []
+      uri: null
+  enabled: true
+  name: request-transformer
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+- config:
+    add:
+      headers:
+      - 'responseAdd: headers'
+      json:
+      - 'responseAdd: json'
+      json_types: []
+    append:
+      headers:
+      - 'responseAppend: headers'
+      json:
+      - 'responseAppend: json'
+      json_types: []
+    remove:
+      headers: []
+      json: []
+    rename:
+      headers: []
+    replace:
+      headers: []
+      json: []
+      json_types: []
+  enabled: true
+  name: response-transformer
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
+services:
+- connect_timeout: 60000
+  host: httpbin.org
+  name: dev1-service
+  path: /get
+  plugins:
+  - config:
+      credentials: false
+      exposed_headers: null
+      headers: null
+      max_age: null
+      methods:
+      - GET
+      - HEAD
+      - PUT
+      - PATCH
+      - POST
+      - DELETE
+      - OPTIONS
+      - TRACE
+      - CONNECT
+      origins:
+      - '*'
+      preflight_continue: false
+    enabled: true
+    name: cors
+    protocols:
+    - grpc
+    - grpcs
+    - http
+    - https
+  port: 443
+  protocol: https
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: dev1-service-route
+    path_handling: v0
+    paths:
+    - /dev1-service
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  write_timeout: 60000
+- connect_timeout: 60000
+  host: httpbin.org
+  name: dev2-service
+  path: /get
+  plugins:
+  - config:
+      add:
+        headers:
+        - 'responseAdd: headers'
+        json:
+        - 'responseAdd: json'
+        json_types: []
+      append:
+        headers:
+        - 'responseAppend: headers'
+        json:
+        - 'responseAppend: json'
+        json_types: []
+      remove:
+        headers: []
+        json: []
+      rename:
+        headers: []
+      replace:
+        headers: []
+        json: []
+        json_types: []
+    enabled: true
+    name: response-transformer
+    protocols:
+    - grpc
+    - grpcs
+    - http
+    - https
+  port: 443
+  protocol: https
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: dev2-service-route
+    path_handling: v0
+    paths:
+    - /dev2-service
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  write_timeout: 60000
+- connect_timeout: 60000
+  host: httpbin.org
+  name: dev3-service
+  path: /get
+  plugins:
+  - config:
+      add:
+        body:
+        - 'requestAdd: body'
+        headers:
+        - 'requestAdd: headers'
+        querystring:
+        - 'requestAdd: queryString'
+      append:
+        body:
+        - 'requestAppend: body'
+        headers:
+        - 'requestAppend: headers'
+        querystring:
+        - 'requestAppend: queryStrings'
+      http_method: null
+      remove:
+        body: []
+        headers: []
+        querystring: []
+      rename:
+        body: []
+        headers: []
+        querystring: []
+      replace:
+        body: []
+        headers: []
+        querystring: []
+        uri: null
+    enabled: true
+    name: request-transformer
+    protocols:
+    - grpc
+    - grpcs
+    - http
+    - https
+  port: 443
+  protocol: https
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    name: dev3-service
+    path_handling: v0
+    paths:
+    - /dev3-service
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: true
+  write_timeout: 60000
