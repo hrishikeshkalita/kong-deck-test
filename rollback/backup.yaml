@@ -1,8 +1,21 @@
 _format_version: "1.1"
 consumers:
-- custom_id: consumer0
+- basicauth_credentials:
+  - password: 2d7bf0c69be9e8b1320072951db82f1e4754d978
+    username: customer0
+  custom_id: consumer0
   username: consumer0
 plugins:
+- config:
+    anonymous: null
+    hide_credentials: true
+  enabled: true
+  name: basic-auth
+  protocols:
+  - grpc
+  - grpcs
+  - http
+  - https
 - config:
     credentials: false
     exposed_headers: null

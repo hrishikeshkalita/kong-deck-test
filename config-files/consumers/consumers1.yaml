@@ -1,0 +1,7 @@
+_format_version: "1.1"
+consumers:
+- basicauth_credentials:
+  - password: <enter-password>
+    username: customer0
+  custom_id: consumer0
+  username: consumer0

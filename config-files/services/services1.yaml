@@ -5,32 +5,6 @@ services:
   host: httpbin.org
   name: dev1-service
   path: /get
-  plugins:
-  - config:
-      credentials: false
-      exposed_headers: null
-      headers: null
-      max_age: null
-      methods:
-      - GET
-      - HEAD
-      - PUT
-      - PATCH
-      - POST
-      - DELETE
-      - OPTIONS
-      - TRACE
-      - CONNECT
-      origins:
-      - '*'
-      preflight_continue: false
-    enabled: true
-    name: cors
-    protocols:
-    - grpc
-    - grpcs
-    - http
-    - https
   port: 443
   protocol: https
   read_timeout: 60000
